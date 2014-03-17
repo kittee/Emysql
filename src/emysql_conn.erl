@@ -386,10 +386,18 @@ encode(null, list) ->
     "null";
 encode(undefined, list) ->
     "null";
+encode(false, list) ->
+    "false";
+encode(true, list) ->
+    "true";
 encode(null, binary)  ->
     <<"null">>;
 encode(undefined, binary)  ->
     <<"null">>;
+encode(false, binary) ->
+    <<"false">>;
+encode(true, binary) ->
+    <<"true">>;
 encode(Val, list) when is_binary(Val) ->
     quote(binary_to_list(Val));
 encode(Val, binary) when is_atom(Val) ->
