@@ -480,7 +480,7 @@ boolean_test(_Config) ->
     ETrue = [{<<"bool">>, 1}],
     EFalse = [{<<"bool">>, 0}],
     [ETrue] = emysql:as_proplist(RTrue),
-    [Efalse] = emysql:as_proplist(RFalse),
+    [EFalse] = emysql:as_proplist(RFalse),
     ok.
 
 %%% Data generation
