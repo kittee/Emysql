@@ -68,7 +68,8 @@ groups() ->
          json_empty_test,
          json_single_test,
          json_multi_test,
-         record_test]}
+         record_test,
+         boolean_test]}
     ].
 
 %% Optional suite pre test initialization
@@ -468,6 +469,19 @@ record_test(_Config) ->
     Expected = emysql:as_record(Result, person, record_info(fields, person)),
     ok.
 
+boolean_test(_Config) ->
+    emysql:execute(test_pool, <<"DROP TABLE IF EXISTS boolean_test">>),
+    emysql:execute(test_pool, <<"CREATE TABLE boolean_test (bool BOOLEAN)">>),
+    emysql:prepare(b_insert, <<"INSERT INTO boolean_test VALUES (?), (?)">>),
+    emysql:prepare(b_select, <<"SELECT * FROM boolean_test WHERE bool = ?">>),
+    emysql:execute(test_pool, b_insert, [true, false]),
+    RTrue = emysql:execute(test_pool, b_select, [true]),
+    RFalse = emysql:execute(test_pool, b_select, [false]),
+    ETrue = [{<<"bool">>, 1}],
+    EFalse = [{<<"bool">>, 0}],
+    [ETrue] = emysql:as_proplist(RTrue),
+    [Efalse] = emysql:as_proplist(RFalse),
+    ok.
 
 %%% Data generation
 %% --------------------------------------------------------------------------------------------
